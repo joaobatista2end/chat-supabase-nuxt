@@ -69,7 +69,6 @@ client
 
 const { pending, execute } = useAsyncData(async () => {
   const time = useDateFormat(useNow(), "HH:mm:ss").value;
-  console.log({ time });
   await client.channel("chat_message").send({
     type: "broadcast",
     event: "chat_message",
