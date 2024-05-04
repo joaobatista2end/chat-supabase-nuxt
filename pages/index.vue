@@ -1,91 +1,41 @@
 <template>
-  <div class="max-w-screen-lg mx-auto">
-    <div class="border-2 bg-zinc-800 text-white rounded-md p-4 mb-8 space-y-2">
-      <h3 class="text-xl mb-8">Message List</h3>
-      <div v-for="(message, index) in messages" :key="index">
-        <div
-          class="bg-zinc-700 text-sm px-2 py-1 rounded-sm inline"
-          v-if="message?.message"
-        >
-          <div
-            class="inline-flex text-xs px-2 rounded-full"
-            :style="{ backgroundColor: message.color }"
-          >
-            {{ message?.nick }}
-          </div>
-          <span class="text-xs mx-2 text-zinc-300">
-            {{ message?.time }}
-          </span>
+  <div class="min-h-screen bg-zinc-800">
+    <div class="max-w-[460px] mx-auto py-10">
+      <div class="text-zinc-100">
+        <h3 class="text-3xl font-bold text-center mb-8">Nuxt Supabase Chat</h3>
+        <p>
+          Nuxt Supabase Chat é uma aplicação de mensagens simples e rápida
+          projetada para facilitar a comunicação instantânea entre amigos,
+          colegas e grupos. Simples, eficiente e direto ao ponto!
+        </p>
 
-          {{ message?.message }}
+        <div class="mt-8 flex justify-center">
+          <div>
+            <input
+              type="text"
+              v-model="channelName"
+              placeholder="Insira o canal"
+              class="px-4 py-2 placeholder:text-zinc-500 bg-white text-zinc-800 outline-none rounded-l mb-4"
+              @keyup.enter="redirectToChannel"
+            />
+            <button
+              @click="redirectToChannel"
+              class="hover:bg-green-600 transition-all bg-green-500 text-white px-4 py-2 font-semibold rounded-r"
+            >
+              Iniciar chat
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <label for="" class="text-zinc-800 font-medium mr-2 block"
-        >My nick:
-      </label>
-      <input
-        type="text"
-        v-model="state.nick"
-        class="px-4 py-2 placeholder:text-zinc-500 bg-zinc-800 text-white outline-none rounded-md mb-4"
-      />
-    </div>
-    <textarea
-      v-model="state.message"
-      placeholder="Type a message"
-      @keyup.enter.prevent="sendMessage"
-      class="block w-full h-36 px-4 py-2 placeholder:text-zinc-500 bg-zinc-800 text-white outline-none rounded-md mb-4"
-    />
-    <div class="flex justify-end">
-      <button
-        class="bg-zinc-800 text-white px-4 py-2 rounded-md"
-        @click="sendMessage()"
-        :disabled="pending"
-      >
-        {{ pending ? "Waiting" : "Send Message" }}
-      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { uid } from 'uid';
+const channelName = ref<string>();
+const router = useRouter();
 
-const client = useSupabaseClient();
-const id = uid();
-const messages = reactive<any[]>([]);
-const randomColor = () => "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-const state = reactive({
-  message: "",
-  nick: id,
-  color: randomColor(),
-});
-
-client
-  .channel("chat_message")
-  .on("broadcast", { event: "chat_message" }, (payload) => {
-    messages.push(payload.payload);
-  })
-  .subscribe();
-
-const { pending, execute } = useAsyncData(async () => {
-  const time = useDateFormat(useNow(), "HH:mm:ss").value;
-  await client.channel("chat_message").send({
-    type: "broadcast",
-    event: "chat_message",
-    payload: {
-      message: state.message,
-      nick: state.nick,
-      color: state.color,
-      time,
-    },
-  });
-});
-
-const sendMessage = async () => {
-  execute();
-  state.message = "";
-};
+const redirectToChannel = () => {
+  router.push(`channel/${channelName.value}`);
+}
 </script>
