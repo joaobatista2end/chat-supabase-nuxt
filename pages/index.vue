@@ -10,19 +10,19 @@
         </p>
 
         <div class="mt-8 flex justify-center">
-          <div>
+          <div class="flex h-11">
             <input
               type="text"
               v-model="channelName"
               placeholder="Insira o canal"
-              class="px-4 py-2 placeholder:text-zinc-500 bg-white text-zinc-800 outline-none rounded-l mb-4"
+              class="px-4 h-full py-2 placeholder:text-zinc-500 bg-white text-zinc-800 outline-none rounded-l mb-4"
               @keyup.enter="redirectToChannel"
             />
             <button
               @click="redirectToChannel"
-              class="hover:bg-green-600 transition-all bg-green-500 text-white px-4 py-2 font-semibold rounded-r"
+              class="hover:bg-green-600 transition-all bg-green-500 text-white px-4 font-semibold rounded-r"
             >
-              Iniciar chat
+              <LucideLogIn class="inline leading-none"/>
             </button>
           </div>
         </div>
