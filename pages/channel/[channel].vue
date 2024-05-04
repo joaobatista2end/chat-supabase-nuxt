@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-screen-lg mx-auto">
     <div class="border-2 bg-zinc-800 text-white rounded-md p-4 mb-8 space-y-2">
-      <h3 class="text-xl mb-8">Message List</h3>
+      <h3 class="text-xl mb-8">Chanell {{ channel }}</h3>
       <div v-for="(message, index) in messages" :key="index">
         <div
           class="bg-zinc-700 text-sm px-2 py-1 rounded-sm inline"
@@ -53,6 +53,8 @@
 <script lang="ts" setup>
 import { uid } from 'uid';
 
+const { params } = useRoute();
+const channel = computed(() => params?.channel as string || id)
 const client = useSupabaseClient();
 const id = uid();
 const messages = reactive<any[]>([]);
@@ -64,7 +66,7 @@ const state = reactive({
 });
 
 client
-  .channel("chat_message")
+  .channel(channel.value)
   .on("broadcast", { event: "chat_message" }, (payload) => {
     messages.push(payload.payload);
   })
@@ -72,7 +74,9 @@ client
 
 const { pending, execute } = useAsyncData(async () => {
   const time = useDateFormat(useNow(), "HH:mm:ss").value;
-  await client.channel("chat_message").send({
+  await client
+  .channel(channel.value)
+  .send({
     type: "broadcast",
     event: "chat_message",
     payload: {
