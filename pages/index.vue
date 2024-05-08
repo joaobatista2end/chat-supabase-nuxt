@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-zinc-800">
-    <div class="max-w-[460px] mx-auto py-10">
+    <div class="max-w-[460px] mx-auto py-10 px-8">
       <div class="text-zinc-100">
         <h3 class="text-3xl font-bold text-center mb-8">Nuxt Supabase Chat</h3>
         <p>

@@ -1,6 +1,6 @@
 <template>
   <div class="bg-zinc-800 h-screen">
-    <div class="max-w-full w-[640px] mx-auto pt-10">
+    <div class="max-w-full w-[640px] mx-auto pt-10 px-8">
       <h3 class="text-xl mb-4 text-white font-bold">Canal: {{ channel }}</h3>
       <div
         class="bg-zinc-700 text-white rounded-md p-4 mb-4 space-y-2 max-h-60 h-60 overflow-scroll"
